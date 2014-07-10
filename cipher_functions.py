@@ -1,5 +1,5 @@
 # Functions for running an encryption or decryption.
-
+#test
 # The values of the two jokers.
 JOKER1 = 27
 JOKER2 = 28
