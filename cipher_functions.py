@@ -12,7 +12,7 @@ decryption_letter = ord('A')
 def clean_message(message):
     """(str) -> str
     
-    #Return a copy of the message that includes only its alphabetical 
+    Return a copy of the message that includes only its alphabetical 
     characters, where each of those characters has been converted to 
     uppercase.
     
@@ -22,11 +22,14 @@ def clean_message(message):
     'DOESTHISTHINGWORK'
     """
     
-    cleaned_message = ""
+    cleaned_message = ''
     for ch in message:
         if ch.isalpha() == True:
             cleaned_message += ch.upper()
+    return cleaned_message
     #passed check
+    
+    
     
 def encrypt_letter(letter, keystream):
     """(str, int) -> str
@@ -39,10 +42,13 @@ def encrypt_letter(letter, keystream):
     >>>encrypt_letter('B', 20)
     40
     """
+    
     letter_number = ord(letter) - decryption_letter
     encrypted_letter = letter_number * keystream
     
     return encrypted_letter
+    
+    
     
 def decrypt_letter(letter, keystream):
     """(str, int) -> str   
@@ -55,6 +61,7 @@ def decrypt_letter(letter, keystream):
     >>>decrypt_letter('Q', 9)
     74
     """
+    
     letter_number = ord(letter) // keystream 
     
     decrypted_letter = letter_number + decryption_letter
@@ -62,7 +69,9 @@ def decrypt_letter(letter, keystream):
     return decrypted_letter
     #needs to be re-checked 
     
-def swap_cards(card_deck, card_index):
+    
+    
+def swap_cards(sample_deck, card_index):
     """(list of int, int) -> NoneType
     
     #Swap the card at the index with the card that follows it. Treat the deck 
@@ -77,20 +86,34 @@ def swap_cards(card_deck, card_index):
     
     #check where in the index it is
     
-    #if it's the last card, insert it back into card_deck as first index
+    #if it's the last card, insert it back into sample_deck as first index
     
     #else move it up 1 in the index
         
-def move_joker_1():
+def move_joker_1(sample_deck):
     """(list of int) -> NoneType
     
-    #This is step 1 of the algorithm. Find JOKER1 and swap it with the card 
-    that follows it. Treat the deck as circular.
+    Find JOKER1 and swap it with the following card in sample_deck.
     
-    #Examples
+    >>>move_joker_1(('1 3 5 27 4 3')
+    
+    >>>
     """
-
-def move_joker_2():
+    
+    i = 0
+    i_last = 27
+    
+    for i in range(len(sample_deck) - 1):
+        if (0 <= i <= 26 and sample_deck[i] == JOKER1):
+            sample_deck[i] = sample_deck[i + 1]
+            sample_deck[i + 1] = JOKER1 #something is wrong with this line
+        elif (sample_deck[i_last] == JOKER1):
+            sample_deck[i_last] = sample_deck[i]
+            sample_deck[i] = JOKER1
+   
+   
+            
+def move_joker_2(sample_deck):
     """(list of int) -> NoneType
 
     #This is step 2 of the algorithm. Find JOKER2 and move it two cards down. 
@@ -98,6 +121,12 @@ def move_joker_2():
     
     #Examples
     """
+    
+    i = 0
+
+    
+
+    
 
 def triple_cut():
     """(list of int) -> NoneType
