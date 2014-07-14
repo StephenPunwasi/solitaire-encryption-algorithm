@@ -84,11 +84,18 @@ def swap_cards(sample_deck, card_index):
     #Examples
     """
     
-    #check where in the index it is
+    i = 0
+    i_last = 27
     
-    #if it's the last card, insert it back into sample_deck as first index
-    
-    #else move it up 1 in the index
+    for i in range(len(sample_deck) - 1):
+        if (0 <= i <= 26 and sample_deck[i] == JOKER1):
+            sample_deck[i] = sample_deck[i + 1]
+            sample_deck[i + 1] = JOKER1 #something is wrong with this line
+        elif (sample_deck[i_last] == JOKER1):
+            sample_deck[i_last] = sample_deck[i]
+            sample_deck[i] = JOKER1
+        
+        
         
 def move_joker_1(sample_deck):
     """(list of int) -> NoneType
@@ -100,19 +107,10 @@ def move_joker_1(sample_deck):
     >>>
     """
     
-    i = 0
-    i_last = 27
+    swap_cards(sample_deck, JOKER1)
     
-    for i in range(len(sample_deck) - 1):
-        if (0 <= i <= 26 and sample_deck[i] == JOKER1):
-            sample_deck[i] = sample_deck[i + 1]
-            sample_deck[i + 1] = JOKER1 #something is wrong with this line
-        elif (sample_deck[i_last] == JOKER1):
-            sample_deck[i_last] = sample_deck[i]
-            sample_deck[i] = JOKER1
-   
-   
-            
+    
+    
 def move_joker_2(sample_deck):
     """(list of int) -> NoneType
 
