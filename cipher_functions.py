@@ -122,7 +122,6 @@ def move_joker_2(sample_deck):
     
     i = 0
 
-    
 
     
 
