@@ -21,7 +21,7 @@ def clean_message(message):
     """
     
     cleaned_message = ""
-    for ch in message: 
+    for ch in message: #TODO: what if message is not a string?
         if ch.isalpha() == True:
             cleaned_message += ch.upper()
     return cleaned_message
@@ -32,12 +32,13 @@ def encrypt_letter(letter, keystream):
     #Apply the keystream value to the character to encrypt the character, and 
     return the result.
     
+    #double check examples
     >>>encrypt_letter('H', 13)
     'U'
     >>>encrypt_letter('B', 20)
     'V'
     """
-
+    
     letter_number = ord(letter) - ord('A') #
     keystream_letter = letter_number + keystream #
     encrypted_letter_num = keystream_letter % 26
@@ -63,6 +64,7 @@ def decrypt_letter(letter, keystream):
         encrypted_letter += ord('A')
     
     return chr(encrypted_letter)
+  
     
 def swap_cards(card_deck, card_index):
     """(list of int, int) -> NoneType
@@ -92,7 +94,7 @@ def swap_cards(card_deck, card_index):
         card_deck[0] = card
     else:
         card_deck[card_index] = card_deck[card_index + 1]
-        card_deck[card_index + 1] = card    
+        card_deck[card_index + 1] = card
 
 
 def move_joker_1(card_deck):
@@ -111,10 +113,8 @@ def move_joker_1(card_deck):
     >>>card_deck
     [JOKER1,2,3,4,5,6,7,8,1]
     """
-    
-    first_joker_index = card_deck.index(JOKER1)
-    swap_cards(card_deck, first_joker_index)    
-
+    index = card_deck.index(JOKER1)
+    swap_cards(card_deck, index)
     
 def move_joker_2(card_deck):
     """(list of int) -> NoneType
@@ -135,13 +135,20 @@ def move_joker_2(card_deck):
     >>>card_deck = [1, 2, 3, 4, 5, JOKER2, 6, 7, 8]
     >>>move_joker_2(card_deck)
     >>>card_deck
-    [1, 2, 3, 4, 5, 6, 7, JOKER2, 8]
+    [1, 2, 3, 4, 5, 6, JOKER2, 7, 8]
     """
     
     second_joker_index = card_deck.index(JOKER2)
-    swap_cards(card_deck, second_joker_index)     
-    second_joker_index = card_deck.index(JOKER2)
-    swap_cards(card_deck, second_joker_index)  
+    
+    if JOKER2 == card_deck[-1]:
+        card_deck.insert(1, JOKER2)
+        card_deck.pop()
+    elif JOKER2 == card_deck[-2]:
+        card_deck.insert(0, JOKER2)
+        card_deck.pop(-2)
+    else:
+        card_deck.insert(second_joker_index+2, JOKER2)
+        card_deck.pop(second_joker_index)
 
 def triple_cut(card_deck):
     """(list of int) -> NoneType
@@ -166,7 +173,7 @@ def triple_cut(card_deck):
         beginning = card_deck[joker2_index+1:] 
         middle = card_deck[joker1_index:joker2_index+1] 
         end = card_deck[:joker1_index]
-        del card_deck[:]    
+        del card_deck[:]
         card_deck.extend(beginning + middle + end)
     else:
         beginning = card_deck[joker1_index+1:] 
@@ -184,7 +191,7 @@ def insert_top_to_bottom(card_deck):
     them just above the bottom card. Special case: if the bottom card is 
     JOKER2, use JOKER1 as the number of cards.
     #Precondition: Both Jokers Must Be Present
-
+    
     >>>card_deck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 13]
     >>>insert_top_to_bottom(card_deck)
     >>>card_deck
@@ -207,8 +214,7 @@ def insert_top_to_bottom(card_deck):
     else:
         card_deck[-1:] = card_deck[:JOKER1] 
         del card_deck[:JOKER1]
-        card_deck.append(last_card)    
-    #needs testing  July 16   
+        card_deck.append(last_card)       
     
 def get_card_at_top_index(card_deck):
     """(list of int) -> int
@@ -227,11 +233,13 @@ def get_card_at_top_index(card_deck):
     """
     
     top_card = card_deck[0]
+
     if top_card == JOKER2:
         return card_deck[JOKER1]
     else:
         return card_deck[top_card]
-    
+
+
 def get_next_value(card_deck):
     """(list of int) -> int
     
@@ -246,7 +254,9 @@ def get_next_value(card_deck):
     triple_cut(card_deck)
     insert_top_to_bottom(card_deck)
     return get_card_at_top_index(card_deck)
-        
+    
+    #Needs Super Amount of Testing
+    
 def get_next_keystream_value(card_deck):
     """(list of int) -> int
     
@@ -256,12 +266,11 @@ def get_next_keystream_value(card_deck):
     
     #Examples
     """
-    
+
     keystream = get_next_value(card_deck)
     
-    while keystream in [JOKER1,JOKER2]:
-        keystream = get_next_value(card_deck)
-        return keystream
+    while keystream > 26:
+        get_next_value(keystream)
     else:
         return keystream
     
@@ -274,32 +283,36 @@ def process_message(card_deck, message, encrypt_decrypt):
     #Examples
     """
     
+    keystream = 0
     processed_message = ''
     message = clean_message(message)
+    
     if 'e' == encrypt_decrypt:
         for ch in message:
-            keystreams = get_next_keystream_value(card_deck)
-            processed_message += encrypt_letter(ch, keystreams)
-    elif 'd' == encrypt_decrypt:
+            keystream = get_next_keystream_value(card_deck)
+            processed_message += encrypt_letter(ch, keystream)
+            print(keystream, ch, processed_message)
+            
+    #Maybe else or elif? 
+    if 'd' == encrypt_decrypt:
         for ch in message:
-            keystreams = get_next_keystream_value(card_deck)
-            processed_message += decrypt_letter(ch, keystreams)            
+            keystream = get_next_keystream_value(card_deck)
+            processed_message += decrypt_letter(ch, keystream)
+            print(keystream, ch, processed_message)
+            
     
     return processed_message
     
-def process_messages(card_deck, messages, encrypt_decrypt):
+def process_messages(card_deck, messages, encypt_decrypt):
     """(list of int, list of str, str) -> list of str
     
     #Return the list of encrypted or decrypted messages.
     
     #Examples
     """
-    message_list = []
-    for message in messages:
-        processed = process_message(card_deck, message, encrypt_decrypt)
-        message_list.append(processed)
-    return message_list
-
+    
+    
+    #return list of str
 def read_messages(message_file):
     """(file open for reading) -> list of str
     
@@ -308,12 +321,13 @@ def read_messages(message_file):
     
     #Examples
     """
-    
+    file = open(message_file, 'r')
+    messages = file.read().splitlines()
     message_list = []
-    for line in message_file:
-        line = line.strip()
+    for line in messages:
         message_list += (line.split(' '))
     return message_list
+    file.close()    #return list of str
     
 def read_deck(deck):
     """(file open for reading) -> list of int
@@ -324,9 +338,12 @@ def read_deck(deck):
     #Examples
     """
     
+    file = open(deck, 'r')
+    deck = file.read().splitlines()
     card_deck = []
     for line in deck:
-        line = (line.strip().split(' '))
-        for num in line:
-            card_deck.append(int(num))
+        card_deck += (line.split(' '))
+    card_deck.pop()
+    card_deck = [int(x) for x in card_deck]
     return card_deck
+    file.close()
