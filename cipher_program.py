@@ -16,13 +16,11 @@ def main():
     the messages from a file called MSG_FILENAME. If MODE is 'e', encrypt;
     otherwise, decrypt.
     """
-    #open deck and assign variable
+    
     open_deck = open(DECK_FILENAME, 'r')
     card_deck = cipher_functions.read_deck(open_deck)
-    #open msg_filename and assign variable
     open_messages = open(MSG_FILENAME, 'r')    
     messages = cipher_functions.read_messages(open_messages)
-    #run processed messages     
     processed = cipher_functions.process_messages(card_deck, messages, MODE)
     print(processed)
     pass
