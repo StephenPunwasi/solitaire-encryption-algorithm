@@ -111,14 +111,14 @@ assert isinstance(result, list), \
 
 
 # Type check cipher_functions.read_deck
-result = cipher_functions.read_deck('deck1.txt')
+result = cipher_functions.read_deck(open('deck1.txt'))
 assert isinstance(result, list), \
     '''read_deck should return a list, but returned {0}''' \
     .format(type(result))
 
 
 # Type check cipher_functions.read_messages
-result = cipher_functions.read_messages('secret1.txt')
+result = cipher_functions.read_messages(open('secret1.txt'))
 assert isinstance(result, list), \
     '''read_messages should return a list, but returned {0}''' \
     .format(type(result))

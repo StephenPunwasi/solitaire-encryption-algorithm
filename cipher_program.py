@@ -15,6 +15,10 @@ def main():
     Perform the encryption using the deck from a file called DECK_FILENAME and
     the messages from a file called MSG_FILENAME. If MODE is 'e', encrypt;
     otherwise, decrypt.
+    
+    >>>main()
+    TCAVORYZALXEZDUJUFFFMHXXVPYHPYNRWWVHVJAHQ
+    BQRAUFQEYXOVOTU
     """
     
     open_deck = open(DECK_FILENAME, 'r')
@@ -22,7 +26,8 @@ def main():
     open_messages = open(MSG_FILENAME, 'r')    
     messages = cipher_functions.read_messages(open_messages)
     processed = cipher_functions.process_messages(card_deck, messages, MODE)
-    print(processed)
-    pass
+    
+    for encrypted_messages in processed:
+        print(encrypted_messages)    
 
 main()

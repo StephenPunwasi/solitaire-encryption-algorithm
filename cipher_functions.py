@@ -6,13 +6,11 @@ JOKER2 = 28
 
 # Write your functions here:
 
-#Assignment Outline Below
 def clean_message(message):
     """(str) -> str
     
-    #Return a copy of the message that includes only its alphabetical 
-    characters, where each of those characters has been converted to 
-    uppercase.
+    Strip the message of all non-alphabetical characters and return as a
+    capitalized string.
     
     >>>clean_message('Testing, 1,2,3. Testing')
     'TESTINGTESTING'
@@ -29,26 +27,28 @@ def clean_message(message):
 def encrypt_letter(letter, keystream):
     """(str, int) -> str
     
-    #Apply the keystream value to the character to encrypt the character, and 
-    return the result.
+    Precondition: len(letter) == 1 
     
+    Return encrypted version of letter based on keystream value.
+            
     >>>encrypt_letter('H', 13)
     'U'
     >>>encrypt_letter('B', 20)
     'V'
     """
 
-    letter_number = ord(letter) - ord('A') #
-    keystream_letter = letter_number + keystream #
+    letter_number = ord(letter) - ord('A')
+    keystream_letter = letter_number + keystream
     encrypted_letter_num = keystream_letter % 26
     encrypted_letter = chr(encrypted_letter_num + ord('A'))
     return encrypted_letter
     
 def decrypt_letter(letter, keystream):
     """(str, int) -> str   
-    
-    #Apply the keystream value to the character to decrypt the character, and 
-    return the result.
+
+    Precondition: len(letter) == 1 
+
+    Return decrypted version of letter based on keystream value.
     
     >>>decrypt_letter('U', 13)
     'H'
@@ -67,12 +67,8 @@ def decrypt_letter(letter, keystream):
 def swap_cards(card_deck, card_index):
     """(list of int, int) -> NoneType
     
-    #Swap the card at the index with the card that follows it. Treat the deck 
-    as circular: if the card at the index is on the bottom of the deck, swap 
-    that card with the top card.
-
-    (Note that in this and all functions that do something to the deck, the 
-    function doesn't return anything. The deck is to be mutated.)
+    Swap the card at the provided index with the following card. Treat the
+    deck as circular, so if the card the last card swaps with the first.
     
     >>>card_deck = [2,3,4,5,6,7,8,9,10]
     >>>swap_cards(card_deck, 4)
@@ -98,18 +94,19 @@ def swap_cards(card_deck, card_index):
 def move_joker_1(card_deck):
     """(list of int) -> NoneType
     
-    #This is step 1 of the algorithm. Find JOKER1 and swap it with the card 
-    that follows it. Treat the deck as circular.
+    Step 1 of the alogrithm. Finds JOKER1 and swaps it with the next card. 
+    The deck is treated circular, so the last card gets swapped with the
+    first.
     
-    >>>card_deck = [1,2,3,4,5,JOKER1,6,7,8]
+    >>>card_deck = [1, 2, 3, 4, 5, JOKER1, 6, 7, 8]
     >>>move_joker_1(card_deck)
     >>>card_deck
-    [1,2,3,4,5,6,JOKER1,7,8]
+    [1, 2, 3, 4, 5, 6, JOKER1, 7, 8]
     
-    >>>card_deck = [1,2,3,4,5,6,7,8,JOKER1]
+    >>>card_deck = [1, 2, 3, 4, 5, 6, 7, 8, JOKER1]
     >>>move_joker_1(card_deck)
     >>>card_deck
-    [JOKER1,2,3,4,5,6,7,8,1]
+    [JOKER1, 2, 3, 4, 5, 6, 7, 8, 1]
     """
     
     first_joker_index = card_deck.index(JOKER1)
@@ -119,8 +116,9 @@ def move_joker_1(card_deck):
 def move_joker_2(card_deck):
     """(list of int) -> NoneType
 
-    #This is step 2 of the algorithm. Find JOKER2 and move it two cards down. 
-    Treat the deck as circular.
+    Step 2 of the algorithm. Find and move JOKER2 two cards down. Treat
+    treats the card deck as circular, making the card after the last the 
+    first.
     
     >>>card_deck = [1, 2, 3, 4, 5, 6, 7, 8, JOKER2]
     >>>move_joker_2(card_deck)
@@ -145,8 +143,12 @@ def move_joker_2(card_deck):
 
 def triple_cut(card_deck):
     """(list of int) -> NoneType
-    #Precondition Jokers must be in list
-    #This is step 3 of the algorithm. Find the two jokers and do a triple cut.
+
+    Precondition: Both JOKER1 and JOKER2 must be in the card deck.
+    
+    Step 3 of the algorithm. Find JOKER1 and JOKER2 in the card deck. Replace
+    all cards after the second joker with all cards before the joker and 
+    vice versa. 
     
     >>>card_deck = [1, 2, 3, 4, JOKER1, 5, 6, 7, 8, JOKER2, 9, 10, 11, 12]
     >>>triple_cut(card_deck)
@@ -174,32 +176,31 @@ def triple_cut(card_deck):
         end = card_deck[:joker2_index]
         del card_deck[:]
         card_deck.extend(beginning + middle + end)        
-    #works but needs to be checked 
         
 def insert_top_to_bottom(card_deck):
     """(list of int) -> NoneType
     
-    #This is step 4 of the algorithm. Look at the bottom card of the deck; 
-    move that many cards from the top of the deck to the bottom, inserting 
-    them just above the bottom card. Special case: if the bottom card is 
-    JOKER2, use JOKER1 as the number of cards.
-    #Precondition: Both Jokers Must Be Present
+    Precondition: Both JOKER1 and JOKER2 must be in the card deck.
+    
+    Step 4 of the algorithm. Take the value of the last card in the deck, and
+    move that number of cards from the top of the deck to the bottom, just 
+    above the last card.
+    
+    If JOKER2 is the bottom card, use the value on JOKER1. 
 
     >>>card_deck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 13]
     >>>insert_top_to_bottom(card_deck)
     >>>card_deck
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 13]
     
-    >>>card_deck = [1,2,3,4,5,6,7,9,10,11,12,13,14,8]
+    >>>card_deck = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 8]
     >>>insert_top_to_bottom(card_deck)
     >>>card_deck
-    [10,11,12,13,14,1,2,3,4,5,6,7,9,8]
+    [10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 9, 8]
     """
-    #identify the card
+
     last_card = card_deck[-1]
     
-    
-    #make sure it's not the joker
     if last_card != JOKER2:
         card_deck[-1:] = card_deck[:last_card] 
         del card_deck[:last_card]
@@ -208,20 +209,18 @@ def insert_top_to_bottom(card_deck):
         card_deck[-1:] = card_deck[:JOKER1] 
         del card_deck[:JOKER1]
         card_deck.append(last_card)    
-    #needs testing  July 16   
     
 def get_card_at_top_index(card_deck):
     """(list of int) -> int
+
+    Step 5 of the algorithm. Use the value on the top card as an index.
+    Return the value of the card at that index. 
     
-    #This is step 5 of the algorithm. Look at the top card. Using that value 
-    as an index, return the card in that deck at that index. Special case: if 
-    the top card is JOKER2, use JOKER1 as the index.
-    
-    >>>card_deck = [1,2,3,4,5,6,7]
+    >>>card_deck = [1, 2, 3, 4, 5, 6, 7]
     >>>get_card_at_top_index(card_deck)
     2
     
-    >>>card_deck = [3,4,5,6,7,8,9,1,2,3,4,5,6,7,10,]
+    >>>card_deck = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 10]
     >>>get_card_at_top_index(card_deck)
     6    
     """
@@ -235,10 +234,15 @@ def get_card_at_top_index(card_deck):
 def get_next_value(card_deck):
     """(list of int) -> int
     
-    #This is the function that does all five steps of the algorithm. Return 
-    the next potential keystream value.
+    Return the next potential keystream by applying all five steps of the 
+    algorithm. 
     
-    #Examples
+    >>> card_deck = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 3, 6, 9, 12, 15,\
+    18, 21, 24, 27, 2, 5, 8, 11, 14, 17, 20, 23, 26]
+    >>> get_next_value(card_deck)
+    11
+    >>> get_next_value(card_deck)
+    9
     """
     
     move_joker_1(card_deck)
@@ -250,11 +254,15 @@ def get_next_value(card_deck):
 def get_next_keystream_value(card_deck):
     """(list of int) -> int
     
-    #This is the function that repeats all five steps of the algorithm (call 
-    get_next_value to get potential keystream values!) until a valid 
-    keystream value (a number in the range 1-26) is produced.
-    
-    #Examples
+    Repeat all five steps of algorithm using the provide card deck until a 
+    valid keysteam is returned.
+        
+    >>> card_deck = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 3, 6, 9, 12, 15,\
+    18, 21, 24, 27, 2, 5, 8, 11, 14, 17, 20, 23, 26]
+    >>> get_next_keystream_value(card_deck)
+    11
+    >>> get_next_keystream_value(card_deck)
+    9
     """
     
     keystream = get_next_value(card_deck)
@@ -268,10 +276,10 @@ def get_next_keystream_value(card_deck):
 def process_message(card_deck, message, encrypt_decrypt):
     """(list of int, str, str) -> str
     
-    #Return the encrypted or decrypted message. Note that the message might 
-    contain non-letters.
+    Precondition: encrypt_decrypt is either 'd' or 'e'. Must start with the 
+    same deck used to encrypt to properly decrypt. 
     
-    #Examples
+    Uses the card deck provided to decode or encode the message. 
     """
     
     processed_message = ''
@@ -290,10 +298,24 @@ def process_message(card_deck, message, encrypt_decrypt):
 def process_messages(card_deck, messages, encrypt_decrypt):
     """(list of int, list of str, str) -> list of str
     
-    #Return the list of encrypted or decrypted messages.
+    Precondition: encrypt_decrypt is either 'd' or 'e'
     
-    #Examples
+    Return the list of encrypted or decrypted messages based on
+    encrypt_decrypt for given card_deck.
+    
+    >>> card_deck = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 3, 6, 9, 12, 15,18,\
+    21, 24, 27, 2, 5, 8, 11, 14, 17, 20, 23, 26]
+    >>> messages = ['apple', 'mac', 'ipad']
+    >>> process_messages(card_deck, messages, 'e')
+    ['LYMSO', 'LLN', 'PXJO']
+    
+    >>> card_deck = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 3, 6, 9, 12, 15,\
+    18, 21, 24, 27, 2, 5, 8, 11, 14, 17, 20, 23, 26]
+    >>> messages = ['WNJVX', 'ALYHVJ', 'APAAM']
+    >>> process_messages(card_deck, messages, 'd')
+    ['LEMON', 'BANANA', 'PEACH']
     """
+    
     message_list = []
     for message in messages:
         processed = process_message(card_deck, message, encrypt_decrypt)
@@ -303,25 +325,21 @@ def process_messages(card_deck, messages, encrypt_decrypt):
 def read_messages(message_file):
     """(file open for reading) -> list of str
     
-    #Read and return the contents of the file as a list of messages. Strip 
-    the newline from each line.
-    
-    #Examples
+    Read and return the contents of message_file as a list of messages.
     """
     
     message_list = []
     for line in message_file:
         line = line.strip()
-        message_list += (line.split(' '))
+        message_list.append(line)
     return message_list
     
 def read_deck(deck):
     """(file open for reading) -> list of int
     
-    #Read and return the contents of the file. Do not hard-code the number 28 
-    anywhere; just read all of the integers from the deck file.
+    Precondtion: Deck file must only contain numbers. 
     
-    #Examples
+    Read and return the contents of a deck file. 
     """
     
     card_deck = []
